@@ -1,0 +1,360 @@
+// Frontend component styles
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-zinc-500 {
+  color: #71717a;
+}
+
+.text-rose-600 {
+  color: #dc2626;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.py-1\.5 {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.size-2 {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.grid {
+  display: grid;
+}
+
+.md\:grid-cols-3 {
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.border-l-4 {
+  border-left-width: 4px;
+}
+
+.pl-10 {
+  padding-left: 2.5rem;
+}
+
+.border-gray-200 {
+  border-color: #e5e7eb;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-zinc-200 {
+  border-color: #e4e4e7;
+}
+
+.dark\:border-zinc-700 {
+  @media (prefers-color-scheme: dark) {
+    border-color: #3f3f46;
+  }
+}
+
+.hover\:bg-zinc-50:hover {
+  background-color: #fafafa;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.border-zinc-200 {
+  border-color: #e4e4e7;
+}
+
+.dark\:border-zinc-300 {
+  @media (prefers-color-scheme: dark) {
+    border-color: #d4d4d8;
+  }
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.gap-x-2 {
+  column-gap: 0.5rem;
+}
+
+.gap-y-1 {
+  row-gap: 0.25rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.bg-zinc-50 {
+  background-color: #fafafa;
+}
+
+.dark\:bg-zinc-900\/50 {
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(24, 24, 27, 0.5);
+  }
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+// Status colors
+.bg-emerald-50 {
+  background-color: #ecfdf5;
+}
+
+.text-emerald-700 {
+  color: #15803d;
+}
+
+.dark\:bg-emerald-400\/20 {
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(52, 211, 153, 0.2);
+  }
+}
+
+.dark\:text-emerald-700 {
+  @media (prefers-color-scheme: dark) {
+    color: #15803d;
+  }
+}
+
+.bg-amber-50 {
+  background-color: #fffbeb;
+}
+
+.text-amber-700 {
+  color: #b45309;
+}
+
+.dark\:bg-amber-400\/20 {
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(251, 191, 36, 0.2);
+  }
+}
+
+.dark\:text-amber-700 {
+  @media (prefers-color-scheme: dark) {
+    color: #b45309;
+  }
+}
+
+.bg-rose-50 {
+  background-color: #fff1f2;
+}
+
+.text-rose-700 {
+  color: #b91c1c;
+}
+
+.dark\:bg-rose-400\/20 {
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(251, 113, 133, 0.2);
+  }
+}
+
+.dark\:text-rose-700 {
+  @media (prefers-color-scheme: dark) {
+    color: #b91c1c;
+  }
+}
+
+.bg-zinc-100 {
+  background-color: #f4f4f5;
+}
+
+.text-zinc-600 {
+  color: #52525b;
+}
+
+.dark\:bg-zinc-800 {
+  @media (prefers-color-scheme: dark) {
+    background-color: #27272a;
+  }
+}
+
+.dark\:text-zinc-400 {
+  @media (prefers-color-scheme: dark) {
+    color: #a1a1aa;
+  }
+}
+
+.bg-emerald-500 {
+  background-color: #10b981;
+}
+
+.bg-amber-500 {
+  background-color: #f59e0b;
+}
+
+.bg-rose-500 {
+  background-color: #ef4444;
+}
+
+.bg-zinc-400 {
+  background-color: #a1a1aa;
+}

@@ -1,0 +1,128 @@
+<!-- bulk-upload.html -->
+<div class="rounded-2xl shadow p-6 bg-white">
+    @if (dataResource.isLoading()) {
+      <div class="text-center text-zinc-500">Loading...</div>
+    }
+    @else if (dataResource.error()) {
+      <div class="text-center text-rose-600">Failed to load health data.</div>
+    }
+    @else if (data()) {
+      <!-- Header -->
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold tracking-tight">
+            {{ data()?.service }}
+          </h2>
+          <p class="text-sm text-zinc-500">
+            Updated: {{ data()?.timestamp | date:'medium' }}
+          </p>
+        </div>
+        <span
+          class="inline-flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-full"
+          [ngClass]="statusClasses()">
+          <span class="size-2 rounded-full" [ngClass]="dotClasses()"></span>
+          {{ status() }}
+        </span>
+      </div>
+  
+      <!-- Grid -->
+      <div class="grid md:grid-cols-3 gap-6 mt-6">
+        <!-- Runtime -->
+        <section class="col-span-1 space-y-3">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Runtime</h3>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div class="text-zinc-500">Node</div><div class="font-medium">{{ data()?.runtime!.nodeVersion }}</div>
+            <div class="text-zinc-500">Platform</div><div class="font-medium break-all text-xs">{{ data()?.runtime!.platform }}</div>
+            <div class="text-zinc-500">Arch</div><div class="font-medium">{{ data()?.runtime!.arch }}</div>
+            <div class="text-zinc-500">Env</div><div class="font-medium">{{ data()?.runtime!.environment }}</div>
+            <div class="text-zinc-500">Domain</div><div class="font-medium">{{ data()?.runtime!.domainEnv }}</div>
+            <div class="text-zinc-500">Uptime</div><div class="font-medium">{{ data()?.runtime!.uptime }}</div>
+          </div>
+  
+          <!-- Memory -->
+          <!-- <div class="mt-4 p-4 rounded-xl border border-zinc-200 dark:border-zinc-300"> -->
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-semibold">Memory</h4>
+              <span class="text-xs text-zinc-500">{{ memoryHealth()?.responseTime }} resp.</span>
+            </div>
+  
+            <div class="mt-3 text-sm grid grid-cols-2 gap-2">
+              <div class="text-zinc-500">RSS</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.rss }}</div>
+              <div class="text-zinc-500">Heap Used</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.heapUsed }}</div>
+              <div class="text-zinc-500">Heap Total</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.heapTotal }}</div>
+              <div class="text-zinc-500">External</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.external }}</div>
+            </div>
+  
+            <div class="mt-4">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-zinc-500">Heap Used %</span>
+                <span class="font-medium">{{ memoryHealth()?.details!.heapUsedPercent }}%</span>
+              </div>
+              <div class="w-full h-2 bg-zinc-100 rounded-full mt-1 overflow-hidden">
+                <div class="h-2 rounded-full transition-all"
+                     [ngClass]="barClasses()"
+                     [style.width.%]="memoryHealth()?.details!.heapUsedPercent">
+                </div>
+              </div>
+              <div class="mt-1 text-[11px] text-zinc-500">
+                Threshold: {{ memoryHealth()?.details!.threshold }}%
+              </div>
+  
+              @if (memoryHealth()?.status !== 'HEALTHY') {
+                <div class="mt-3 text-xs text-amber-700 dark:text-amber-400">
+                  Memory status: {{ memoryHealth()?.status }}
+                </div>
+              }
+            </div>
+          <!-- </div> -->
+        </section>
+  
+        <!-- Versions -->
+        <section class="col-span-2 border-l-4 pl-10 border-gray-200">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Versions</h3>
+            <button type="button"
+                    class="text-xs px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 cursor-pointer"
+                    (click)="showJson.set(!showJson())">
+              {{ showJson() ? 'Hide' : 'Show' }} Raw JSON
+            </button>
+          </div>
+  
+          <div class="mt-3 grid grid-cols-1 gap-4">
+            @for (v of versionEntries(); track v.key) {
+              <div class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-300">
+                <div class="flex items-center justify-between">
+                  <div class="font-medium">{{ v.key }}</div>
+                  @if (v.value.app) {
+                    <span class="text-xs text-zinc-500">app {{ v.value.app }}</span>
+                  }
+                </div>
+                <div class="mt-2 text-sm grid grid-cols-3 gap-x-2 gap-y-1">
+                  <div class="text-zinc-500">Commit</div>
+                  <div class="col-span-2 font-mono text-xs break-all">{{ short(v.value.commit) }}</div>
+  
+                  <div class="text-zinc-500">Branch</div>
+                  <div class="col-span-2 font-medium">{{ v.value.branch }}</div>
+  
+                  <div class="text-zinc-500">Tag</div>
+                  <div class="col-span-2 font-medium">{{ v.value.tag }}</div>
+  
+                  @if (v.value.buildTime) {
+                    <div class="text-zinc-500">Build Time</div>
+                    <div class="col-span-2 font-medium">{{ v.value.buildTime | date:'medium' }}</div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+  
+          @if (showJson()) {
+            <pre class="mt-4 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-300 overflow-auto text-xs">
+  {{ data() | json }}
+            </pre>
+          }
+        </section>
+      </div>
+    }
+  </div>
+  

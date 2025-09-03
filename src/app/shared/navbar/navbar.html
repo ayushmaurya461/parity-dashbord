@@ -1,0 +1,14 @@
+<nav>
+  <div class="nav-section">
+    <ul class="nav-items">
+      @for (item of navigationItems; track item.route) {
+        <li
+          [ngClass]="{ active: currentRoute() === item.route }"
+          (click)="navigateTo(item.route)"
+        >
+          {{ item.title }}
+        </li>
+      }
+    </ul>
+  </div>
+</nav>

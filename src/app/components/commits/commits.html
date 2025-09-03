@@ -1,0 +1,212 @@
+<div class="commits-container">
+  <div class="p-4">
+    <h1 class="text-2xl font-bold">Release Parity Dashboard</h1>
+  </div>
+
+  <div class="bg-white border-b border-gray-200 p-4 flex flex-wrap items-center gap-4">
+    <div class="flex items-center gap-2">
+      <label class="text-sm font-medium text-gray-700">Baseline:</label>
+      <select class="px-3 py-1 border border-gray-300 rounded text-sm" 
+              [value]="baselineEnvironment()"
+              (change)="onBaselineChange($event)">
+          <option value="">None</option>
+        @for (env of environments; track env.title) {
+          <option [value]="env.title">{{ env.title }}</option>
+        }
+      </select>
+    </div>
+  
+    
+    <div class="flex items-center gap-2">
+      <label class="text-sm font-medium text-gray-700">Search:</label>
+      <div class="relative">
+        <input type="text" placeholder="Service, commit, branch..." 
+               class="px-3 py-1 border border-gray-300 rounded text-sm w-64 pr-8"
+               [value]="searchFilter()"
+               (input)="onSearchChange($event)">
+        @if (searchFilter()) {
+          <button (click)="clearSearch()" 
+                  class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm">
+            ✕
+          </button>
+        }
+      </div>
+      @if (searchFilter()) {
+        <span class="text-xs text-gray-500">
+          {{ getSearchResultCount() }} of {{ getTotalServiceCount() }} services
+        </span>
+      }
+    </div>
+    
+    <div class="flex items-center gap-2 ml-auto">
+            <button (click)="refreshData()" 
+              [disabled]="isRefreshing()"
+              class="px-4 py-1 bg-red-800 text-white rounded text-sm hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        @if (isRefreshing()) {
+          <span class="flex items-center gap-1">
+            <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+            Refreshing...
+          </span>
+        } @else {
+          Refresh
+        }
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading() && !hasAnyData()) {
+    <div class="bg-white p-8 text-center">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+      <p class="mt-2 text-gray-600">Loading commit data...</p>
+    </div>
+  } @else {
+    
+    <div class="bg-white overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b border-gray-200">SERVICE</th>
+            @for (env of environments; track env.title) {
+              <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700 border-b border-gray-200">
+                {{ env.title }}
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @if (getFilteredServices().length === 0 && searchFilter()) {
+            <tr>
+              <td [attr.colspan]="environments.length + 1" class="px-4 py-8 text-center text-gray-500">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="text-lg">🔍</span>
+                  <span>No services found matching "{{ searchFilter() }}"</span>
+                  <button (click)="clearSearch()" 
+                          class="text-sm text-blue-600 hover:text-blue-800 underline">
+                    Clear search
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            @for (service of getFilteredServices(); track service.name) {
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="service-column">
+                <div class="service-name">
+                  <div class="service-title">{{ service.displayName }}</div>
+                  @if (getBaselineCommits(service.name).length > 0) {
+                    <div class="baseline-info">
+                      <span class="baseline-label">Baseline:</span>
+                      @for (commit of getBaselineCommits(service.name); track commit.name) {
+                        <div class="baseline-commit-item">
+                          <span class="baseline-commit">{{ commit.commit }}</span>
+                          @if (commit.name !== 'main' && commit.name !== service.name) {
+                            <span class="commit-name">{{ commit.name }}</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </td>
+              @for (env of environments; track env.title) {
+                <td class="text-center text-sm">
+                  @if (getServiceStatus(env.title, service.name) === 'LOADING') {
+                    <div class="flex flex-col items-center justify-center gap-1">
+                      <div class="status-indicator loading"></div>
+                      <span class="text-sm font-medium text-blue-600">Loading...</span>
+                    </div>
+                  } @else if (getServiceError(env.title, service.name)) {
+                    <div class="flex flex-col items-center justify-center gap-1">
+                      <div class="status-indicator unhealthy"></div>
+                      <span class="error-text font-medium text-red-600 text-center" 
+                            title="{{ getServiceError(env.title, service.name) }}">
+                        {{ getServiceError(env.title, service.name) }}
+                      </span>
+                    </div>
+                  } @else {
+                    <div class="flex flex-col items-center justify-center gap-1">
+                      <div class="status-indicator" 
+                           [class.healthy]="getCommitStatusClass(env.title, service.name) === 'text-green-600'"
+                           [class.degraded]="getCommitStatusClass(env.title, service.name) === 'text-red-600'"
+                           [class.unhealthy]="getCommitStatusClass(env.title, service.name) === 'text-gray-500'"
+                           [class.loading]="getServiceStatus(env.title, service.name) === 'LOADING'"></div>
+                      
+                      <div class="commit-list">
+                        @if (getAllServiceCommits(env.title, service.name).length > 0) {
+                          @for (commit of getAllServiceCommits(env.title, service.name); track commit.name) {
+                            <div class="commit-item">
+                              <span class="commit-hash" 
+                                    [ngClass]="getCommitStatusClass(env.title, service.name)">
+                                {{ commit.commit }}
+                              </span>
+                              @if (commit.name !== 'main' && commit.name !== service.name) {
+                                <span class="commit-name">{{ commit.name }}</span>
+                              }
+                            </div>
+                          }
+                        } @else {
+                          <div class="commit-item">
+                            <span class="commit-hash text-gray-500">N/A</span>
+                          </div>
+                        }
+                      </div>
+                      
+                      @if (env.title !== baselineEnvironment()) {
+                        <div class="status-comparison" 
+                             [class.matches]="getCommitStatusClass(env.title, service.name) === 'text-green-600'"
+                             [class.differs]="getCommitStatusClass(env.title, service.name) === 'text-red-600'"
+                             [class.unknown]="getCommitStatusClass(env.title, service.name) === 'text-gray-500'">
+                          {{ getCommitStatusIcon(env.title, service.name) }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </td>
+              }
+            </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="bg-gray-50 px-4 py-2 text-xs text-gray-500 border-t border-gray-200">
+      <div class="flex justify-between items-center">
+        <span>Last updated: {{ tableData().lastUpdated }}</span>
+        <span class="flex items-center gap-4">
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            <span>Healthy: {{ getHealthyCount() }}</span>
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+            <span>Degraded: {{ getDegradedCount() }}</span>
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+            <span>Unhealthy: {{ getUnhealthyCount() }}</span>
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+            <span>Loading: {{ getLoadingCount() }}</span>
+          </span>
+        </span>
+      </div>
+      <div class="mt-1 flex items-center gap-4 text-xs">
+        <span class="flex items-center gap-1">
+          <span class="text-green-600">✅</span>
+          <span>Matches baseline</span>
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="text-red-600">❌</span>
+          <span>Differs from baseline</span>
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="text-gray-500 bg-gray-300 px-2 py-1 rounded-md">N/A</span>
+          <span>No baseline data</span>
+        </span>
+        <span class="text-blue-600">Baseline: {{ baselineEnvironment() }}</span>
+      </div>
+    </div>
+  }
+</div>

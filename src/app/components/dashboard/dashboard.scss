@@ -1,0 +1,227 @@
+// Dashboard component styles - Complete rewrite
+.dashboard-container {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  h1 {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+  }
+}
+
+.environment-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  label {
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background: white;
+    font-size: 0.875rem;
+    
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+}
+
+.environment-info {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #93c5fd;
+  
+  h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e40af;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #1d4ed8;
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.service-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid #e5e7eb;
+  min-height: auto;
+  display: block;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.service-title {
+  background: #f8fafc;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.service-content {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+// Force override all child component styles
+.service-card {
+  app-admin,
+  app-alert,
+  app-bulk-upload,
+  app-data-visualization {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    // Override all child divs
+    > div {
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      background: transparent !important;
+      padding: 1.5rem !important;
+      border: none !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      max-width: none !important;
+    }
+    
+    // Override specific classes
+    .rounded-2xl,
+    .shadow,
+    .p-6,
+    .bg-white {
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 1.5rem !important;
+      background: transparent !important;
+      margin: 0 !important;
+    }
+    
+    // Ensure proper spacing for content
+    .grid {
+      gap: 1rem !important;
+    }
+    
+    .text-center {
+      text-align: center !important;
+    }
+  }
+}
+
+// Responsive design
+@media (min-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .services-grid {
+    gap: 1rem;
+  }
+  
+  .service-card {
+    app-admin,
+    app-alert,
+    app-bulk-upload,
+    app-data-visualization {
+      > div {
+        padding: 1rem !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 0.5rem;
+  }
+  
+  .dashboard-header {
+    padding: 0.75rem;
+  }
+  
+  .service-title {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .service-card {
+    app-admin,
+    app-alert,
+    app-bulk-upload,
+    app-data-visualization {
+      > div {
+        padding: 0.75rem !important;
+      }
+    }
+  }
+}

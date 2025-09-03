@@ -1,0 +1,66 @@
+<div class="dashboard-container">
+  <!-- Environment Selection Header -->
+  <div class="dashboard-header">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Detailed Overview</h1>
+    <div class="environment-selector">
+      <label class="text-sm font-medium text-gray-700 mr-2">Environment:</label>
+      <select 
+        [value]="selectedEnvironment()" 
+        (change)="onEnvironmentChange($event)"
+        class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        @for (env of environments; track env.title) {
+          <option [value]="env.title">{{ env.title }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Selected Environment Info -->
+  <div class="environment-info mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+    <h2 class="text-lg font-semibold text-blue-800 mb-2">
+      {{ getCurrentEnvironment()?.title }} Environment
+    </h2>
+    <p class="text-sm text-blue-600">
+      URL: {{ getCurrentEnvironment()?.url }}
+    </p>
+  </div>
+
+  <!-- Service Health Cards -->
+  <div class="services-grid">
+    <div class="service-card">
+      <h3 class="service-title">Bulk Upload Service</h3>
+      <div class="service-content">
+        <app-bulk-upload></app-bulk-upload>
+      </div>
+    </div>
+    
+    <div class="service-card">
+      <h3 class="service-title">Admin API</h3>
+      <div class="service-content">
+        <app-admin></app-admin>
+      </div>
+    </div>
+    
+    <div class="service-card">
+      <h3 class="service-title">Alert Service</h3>
+      <div class="service-content">
+        <app-alert></app-alert>
+      </div>
+    </div>
+    
+    <div class="service-card">
+      <h3 class="service-title">Data Visualization Service</h3>
+      <div class="service-content">
+        <app-data-visualization></app-data-visualization>
+      </div>
+    </div>
+    
+    <div class="service-card">
+      <h3 class="service-title">Data Visualization Service</h3>
+      <div class="service-content">
+        <app-frontend></app-frontend>
+      </div>
+    </div>
+
+  </div>
+</div>
