@@ -1,19 +1,19 @@
-<!-- delta.html -->
-<div class="rounded-2xl shadow p-6 bg-white">
+<!-- admin.html -->
+<div class="service-card-container">
     @if (dataResource.isLoading()) {
-      <div class="text-center text-zinc-500">Loading...</div>
+      <div class="text-center text-secondary">Loading...</div>
     }
     @else if (dataResource.error()) {
-      <div class="text-center text-rose-600">Failed to load delta health.</div>
+      <div class="text-center text-error">Failed to load delta health.</div>
     }
     @else if (data()) {
       <!-- Header -->
       <div class="flex items-start justify-between gap-4">
         <div>
-          <h2 class="text-xl font-semibold tracking-tight">
+          <h2 class="text-xl font-semibold tracking-tight text-primary">
             {{ data()?.service }}
           </h2>
-          <p class="text-sm text-zinc-500">
+          <p class="text-sm text-secondary">
             Updated: {{ data()?.timestamp | date:'medium' }}
           </p>
         </div>
@@ -29,46 +29,46 @@
       <div class="grid md:grid-cols-3 gap-6 mt-6">
         <!-- Runtime -->
         <section class="col-span-1 space-y-3">
-          <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Runtime</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-secondary">Runtime</h3>
           <div class="grid grid-cols-2 gap-2 text-sm">
-            <div class="text-zinc-500">Node</div><div class="font-medium">{{ data()?.runtime!.nodeVersion }}</div>
-            <div class="text-zinc-500">Platform</div><div class="font-medium break-all text-xs">{{ data()?.runtime!.platform }}</div>
-            <div class="text-zinc-500">Arch</div><div class="font-medium">{{ data()?.runtime!.arch }}</div>
-            <div class="text-zinc-500">Env</div><div class="font-medium">{{ data()?.runtime!.environment }}</div>
-            <div class="text-zinc-500">Domain</div><div class="font-medium">{{ data()?.runtime!.domainEnv }}</div>
-            <div class="text-zinc-500">Uptime</div><div class="font-medium">{{ data()?.runtime!.uptime }}</div>
+            <div class="text-secondary">Node</div><div class="font-medium text-primary">{{ data()?.runtime!.nodeVersion }}</div>
+            <div class="text-secondary">Platform</div><div class="font-medium text-primary break-all text-xs">{{ data()?.runtime!.platform }}</div>
+            <div class="text-secondary">Arch</div><div class="font-medium text-primary">{{ data()?.runtime!.arch }}</div>
+            <div class="text-secondary">Env</div><div class="font-medium text-primary">{{ data()?.runtime!.environment }}</div>
+            <div class="text-secondary">Domain</div><div class="font-medium text-primary">{{ data()?.runtime!.domainEnv }}</div>
+            <div class="text-secondary">Uptime</div><div class="font-medium text-primary">{{ data()?.runtime!.uptime }}</div>
           </div>
   
           <!-- Memory -->
           <div class="flex items-center justify-between mt-4">
-            <h4 class="text-sm font-semibold">Memory</h4>
-            <span class="text-xs text-zinc-500">{{ memoryHealth()?.responseTime }} resp.</span>
+            <h4 class="text-sm font-semibold text-primary">Memory</h4>
+            <span class="text-xs text-secondary">{{ memoryHealth()?.responseTime }} resp.</span>
           </div>
   
           <div class="mt-3 text-sm grid grid-cols-2 gap-2">
-            <div class="text-zinc-500">RSS</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.rss }}</div>
-            <div class="text-zinc-500">Heap Used</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.heapUsed }}</div>
-            <div class="text-zinc-500">Heap Total</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.heapTotal }}</div>
-            <div class="text-zinc-500">External</div><div class="font-medium">{{ data()?.runtime!.memoryUsage.external }}</div>
+            <div class="text-secondary">RSS</div><div class="font-medium text-primary">{{ data()?.runtime!.memoryUsage.rss }}</div>
+            <div class="text-secondary">Heap Used</div><div class="font-medium text-primary">{{ data()?.runtime!.memoryUsage.heapUsed }}</div>
+            <div class="text-secondary">Heap Total</div><div class="font-medium text-primary">{{ data()?.runtime!.memoryUsage.heapTotal }}</div>
+            <div class="text-secondary">External</div><div class="font-medium text-primary">{{ data()?.runtime!.memoryUsage.external }}</div>
           </div>
   
           <div class="mt-4">
             <div class="flex items-center justify-between text-xs">
-              <span class="text-zinc-500">Heap Used %</span>
-              <span class="font-medium">{{ memoryHealth()?.details!.heapUsedPercent }}%</span>
+              <span class="text-secondary">Heap Used %</span>
+              <span class="font-medium text-primary">{{ memoryHealth()?.details!.heapUsedPercent }}%</span>
             </div>
-            <div class="w-full h-2 bg-zinc-100 rounded-full mt-1 overflow-hidden">
+            <div class="w-full h-2 bg-tertiary rounded-full mt-1 overflow-hidden">
               <div class="h-2 rounded-full transition-all"
                    [ngClass]="barClasses()"
                    [style.width.%]="memoryHealth()?.details!.heapUsedPercent">
               </div>
             </div>
-            <div class="mt-1 text-[11px] text-zinc-500">
+            <div class="mt-1 text-[11px] text-secondary">
               Threshold: {{ memoryHealth()?.details!.threshold }}%
             </div>
   
             @if (memoryHealth()?.status !== 'HEALTHY') {
-              <div class="mt-3 text-xs text-amber-700 dark:text-amber-400">
+              <div class="mt-3 text-xs text-warning">
                 Memory status: {{ memoryHealth()?.status }}
               </div>
             }
@@ -76,38 +76,38 @@
         </section>
   
         <!-- Version -->
-        <section class="col-span-2 border-l-4 pl-10 border-gray-200">
+        <section class="col-span-2 border-l-4 pl-10 border-border">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Version</h3>
+            <h3 class="text-sm font-semibold uppercase tracking-wider text-secondary">Version</h3>
             <button type="button"
-                    class="text-xs px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 cursor-pointer"
+                    class="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-secondary cursor-pointer text-primary"
                     (click)="showJson.set(!showJson())">
               {{ showJson() ? 'Hide' : 'Show' }} Raw JSON
             </button>
           </div>
   
-          <div class="mt-3 p-4 rounded-xl border border-zinc-200 dark:border-zinc-300">
+          <div class="mt-3 p-4 rounded-xl border border-border bg-secondary">
             <div class="flex items-center justify-between">
-              <div class="font-medium">Delta</div>
-              <span class="text-xs text-zinc-500">app {{ data()?.version!.app }}</span>
+              <div class="font-medium text-primary">Delta</div>
+              <span class="text-xs text-secondary">app {{ data()?.version!.app }}</span>
             </div>
             <div class="mt-2 text-sm grid grid-cols-3 gap-x-2 gap-y-1">
-              <div class="text-zinc-500">Commit</div>
-              <div class="col-span-2 font-mono text-xs break-all">{{ short(data()?.version!.commit) }}</div>
+              <div class="text-secondary">Commit</div>
+              <div class="col-span-2 font-mono text-xs break-all text-primary">{{ short(data()?.version!.commit) }}</div>
   
-              <div class="text-zinc-500">Branch</div>
-              <div class="col-span-2 font-medium">{{ data()?.version!.branch }}</div>
+              <div class="text-secondary">Branch</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.version!.branch }}</div>
   
-              <div class="text-zinc-500">Tag</div>
-              <div class="col-span-2 font-medium">{{ data()?.version!.tag }}</div>
+              <div class="text-secondary">Tag</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.version!.tag }}</div>
   
-              <div class="text-zinc-500">Build Time</div>
-              <div class="col-span-2 font-medium">{{ data()?.version!.buildTime | date:'medium' }}</div>
+              <div class="text-secondary">Build Time</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.version!.buildTime | date:'medium' }}</div>
             </div>
           </div>
   
           @if (showJson()) {
-            <pre class="mt-4 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-300 overflow-auto text-xs">
+            <pre class="mt-4 p-4 rounded-xl bg-tertiary border border-border overflow-auto text-xs text-primary">
   {{ data() | json }}
             </pre>
           }

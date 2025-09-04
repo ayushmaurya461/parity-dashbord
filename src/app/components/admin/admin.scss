@@ -1,0 +1,129 @@
+// Admin Service Component Styles
+.service-card-container {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Theme-aware utility classes
+.text-primary {
+  color: var(--text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.text-error {
+  color: var(--error-color) !important;
+}
+
+.text-warning {
+  color: var(--warning-color) !important;
+}
+
+.bg-primary {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-tertiary {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.border-border {
+  border-color: var(--border-color) !important;
+}
+
+// Hover states
+.hover\:bg-secondary:hover {
+  background-color: var(--bg-secondary) !important;
+}
+
+// Status classes (keep existing functionality)
+.bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+.text-emerald-700 {
+  color: #059669 !important;
+}
+
+.bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+}
+
+.text-amber-700 {
+  color: #b45309 !important;
+}
+
+.bg-rose-50 {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.text-rose-700 {
+  color: #b91c1c !important;
+}
+
+.bg-zinc-100 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.text-zinc-600 {
+  color: var(--text-secondary) !important;
+}
+
+// Status dots
+.bg-emerald-500 {
+  background-color: #10b981 !important;
+}
+
+.bg-amber-500 {
+  background-color: #f59e0b !important;
+}
+
+.bg-rose-500 {
+  background-color: #ef4444 !important;
+}
+
+.bg-zinc-400 {
+  background-color: var(--text-muted) !important;
+}
+
+// Progress bars
+.bg-emerald-500 {
+  background-color: #10b981 !important;
+}
+
+.bg-amber-500 {
+  background-color: #f59e0b !important;
+}
+
+.bg-rose-500 {
+  background-color: #ef4444 !important;
+}
+
+// Dark theme specific overrides
+.dark-theme .service-card-container {
+  .text-amber-700 {
+    color: var(--accent-color) !important;
+  }
+  
+  .dark\:text-amber-400 {
+    color: var(--accent-color) !important;
+  }
+  
+  .dark\:bg-zinc-900\/50 {
+    background-color: var(--bg-tertiary) !important;
+  }
+  
+  .dark\:border-zinc-300,
+  .dark\:border-zinc-700 {
+    border-color: var(--border-color) !important;
+  }
+}

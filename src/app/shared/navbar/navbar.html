@@ -1,14 +1,71 @@
-<nav>
+<nav class="navbar">
+  <!-- Brand Section -->
+  <div class="brand-section">
+    <div class="brand-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1 class="brand-title">Parity Dashboard</h1>
+        <span class="brand-subtitle">Health Monitoring</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Section -->
   <div class="nav-section">
     <ul class="nav-items">
       @for (item of navigationItems; track item.route) {
-        <li
-          [ngClass]="{ active: currentRoute() === item.route }"
-          (click)="navigateTo(item.route)"
-        >
-          {{ item.title }}
+        <li class="nav-item" [ngClass]="{ active: currentRoute() === item.route }" (click)="navigateTo(item.route)">
+          <div class="nav-icon">
+            @if (item.icon) {
+              <i [class]="item.icon"></i>
+            }
+          </div>
+          <span class="nav-text">{{ item.title }}</span>
+          <div class="nav-indicator"></div>
         </li>
       }
     </ul>
+  </div>
+
+  <!-- Actions Section -->
+  <div class="actions-section">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" (click)="toggleTheme()">
+      <div class="theme-icon">
+        <i class="fas fa-sun" [class.hidden]="isDarkMode()"></i>
+        <i class="fas fa-moon" [class.hidden]="!isDarkMode()"></i>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+      <div class="hamburger" [class.active]="isMobileMenuOpen()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen()">
+    <div class="mobile-nav-items">
+      @for (item of navigationItems; track item.route) {
+        <div class="mobile-nav-item" [ngClass]="{ active: currentRoute() === item.route }" (click)="navigateTo(item.route); closeMobileMenu()">
+          <div class="mobile-nav-icon">
+            @if (item.icon) {
+              <i [class]="item.icon"></i>
+            }
+          </div>
+          <span class="mobile-nav-text">{{ item.title }}</span>
+        </div>
+      }
+    </div>
   </div>
 </nav>

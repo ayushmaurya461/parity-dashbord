@@ -3,16 +3,20 @@
   max-width: 100%;
   margin: 0 auto;
   overflow: hidden;
-  background: #ffffff;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 // Table container
 .bg-white.overflow-x-auto {
+  background: var(--bg-primary) !important;
   border-radius: 8px;
   overflow-x: auto;
   overflow-y: visible;
+  transition: background-color 0.3s ease;
 }
 
 // Responsive design
@@ -54,42 +58,45 @@ th:last-child, td:last-child {
 
 // Table header styling
 thead th {
-  background: #f8fafc;
+  background: var(--bg-secondary);
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
   text-align: center;
   padding: 10px 6px;
-  border-bottom: 2px solid #d1d5db;
+  border-bottom: 2px solid var(--border-color);
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 // Service name column
 tbody td:first-child {
-  background: #f9fafb;
+  background: var(--bg-tertiary);
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   min-width: 180px;
   text-align: left;
   padding: 8px 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 // Environment columns
 tbody td:not(:first-child) {
   text-align: center;
   min-width: 140px;
-  background: #ffffff;
+  background: var(--bg-primary);
   padding: 6px 4px;
+  transition: background-color 0.3s ease;
 }
 
 // Row hover effect
 tbody tr:hover td {
-  background: #f8fafc;
+  background: var(--bg-secondary);
 }
 
 tbody tr:hover td:first-child {
-  background: #f1f5f9;
+  background: var(--bg-tertiary);
 }
 
 // Status dot styling
@@ -191,20 +198,45 @@ tbody tr:hover td:first-child {
 }
 
 // Theme matching with navbar
-.bg-red-900 {
-  background-color: #8b0000; // Exact match with navbar dark red
+.bg-blue-600 {
+  background-color: #2563eb; // Primary blue from navbar theme
 }
 
-.bg-red-800 {
-  background-color: #970101; // Slightly lighter red for buttons (matches navbar hover)
+.bg-blue-700 {
+  background-color: #1d4ed8; // Darker blue for hover state
 }
 
-.hover\:bg-red-700:hover {
-  background-color: #a50101; // Hover state
+.hover\:bg-blue-700:hover {
+  background-color: #1d4ed8; // Hover state
 }
 
-.border-red-600 {
-  border-color: #8b0000; // For loading spinner
+.border-blue-600 {
+  border-color: #2563eb; // For loading spinner
+}
+
+// Theme-aware utility classes
+.text-primary {
+  color: var(--text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.bg-primary {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-tertiary {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.border-border {
+  border-color: var(--border-color) !important;
 }
 
 // Multiple commits display
@@ -229,29 +261,32 @@ tbody tr:hover td:first-child {
   align-items: center;
   gap: 4px;
   padding: 1px 3px;
-  background: rgba(249, 250, 251, 0.6);
+  background: var(--bg-tertiary);
   border-radius: 3px;
-  border: 1px solid rgba(229, 231, 235, 0.3);
+  border: 1px solid var(--border-color);
   min-width: 100px;
   justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .commit-hash {
   font-family: 'Courier New', monospace;
   font-size: 12px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   letter-spacing: 0.3px;
+  transition: color 0.3s ease;
 }
 
 .commit-name {
   font-size: 10px;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 500;
-  background: rgba(107, 114, 128, 0.08);
+  background: var(--bg-secondary);
   padding: 1px 3px;
   border-radius: 2px;
   white-space: nowrap;
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 // Baseline display
@@ -275,8 +310,9 @@ tbody tr:hover td:first-child {
 .service-title {
   font-size: 14px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   line-height: 1.3;
+  transition: color 0.3s ease;
 }
 
 .baseline-info {
@@ -284,7 +320,8 @@ tbody tr:hover td:first-child {
   flex-direction: column;
   gap: 2px;
   font-size: 11px;
-  color: #6b7280;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
 }
 
 .baseline-commit-item {
@@ -295,15 +332,17 @@ tbody tr:hover td:first-child {
 
 .baseline-label {
   font-weight: 500;
-  color: #3b82f6;
+  color: var(--primary-color);
+  transition: color 0.3s ease;
 }
 
 .baseline-commit {
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  color: #374151;
-  background: rgba(59, 130, 246, 0.05);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
   padding: 1px 4px;
   border-radius: 2px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--border-color);
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }

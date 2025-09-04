@@ -1,10 +1,10 @@
 <!-- frontend.html -->
-<div class="rounded-2xl shadow p-6 bg-white">
+<div class="service-card-container">
     @if (dataResource.isLoading()) {
-      <div class="text-center text-zinc-500">Loading...</div>
+      <div class="text-center text-secondary">Loading...</div>
     }
     @else if (dataResource.error()) {
-      <div class="text-center text-rose-600">Failed to load frontend info.</div>
+      <div class="text-center text-error">Failed to load frontend info.</div>
     }
     @else if (data()) {
       <!-- Header -->
@@ -13,12 +13,12 @@
           <h2 class="text-xl font-semibold tracking-tight">
             Frontend Service
           </h2>
-          <p class="text-sm text-zinc-500">
+          <p class="text-sm text-secondary">
             Updated: {{ data()?.buildTime | date:'medium' }}
           </p>
         </div>
         <span
-          class="inline-flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-full"
+          class="inline-flex items-center gap-2 text-sm font-medium text-primary px-3 py-1.5 rounded-full"
           [ngClass]="statusClasses()">
           <span class="size-2 rounded-full" [ngClass]="dotClasses()"></span>
           {{ status() }}
@@ -29,56 +29,56 @@
       <div class="grid md:grid-cols-3 gap-6 mt-6">
         <!-- Environment -->
         <section class="col-span-1 space-y-3">
-          <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Environment</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-secondary">Environment</h3>
           <div class="grid grid-cols-2 gap-2 text-sm">
-            <div class="text-zinc-500">Node Version</div><div class="font-medium">{{ data()?.environment?.nodeVersion }}</div>
-            <div class="text-zinc-500">Build Time</div><div class="font-medium">{{ data()?.buildTime | date:'short' }}</div>
-            <div class="text-zinc-500">URL</div><div class="font-medium break-all text-xs">{{ url() }}</div>
+            <div class="text-secondary">Node Version</div><div class="font-medium text-primary">{{ data()?.environment?.nodeVersion }}</div>
+            <div class="text-secondary">Build Time</div><div class="font-medium text-primary">{{ data()?.buildTime | date:'short' }}</div>
+            <div class="text-secondary">URL</div><div class="font-medium text-primary break-all text-xs">{{ url() }}</div>
           </div>
         </section>
   
         <!-- Git Information -->
-        <section class="col-span-2 border-l-4 pl-10 border-gray-200">
+        <section class="col-span-2 border-l-4 pl-10 border-border">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Git Information</h3>
+            <h3 class="text-sm font-semibold uppercase tracking-wider text-secondary">Git Information</h3>
             <button type="button"
-                    class="text-xs px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 cursor-pointer"
+                    class="text-xs px-3 py-1.5 rounded-lg border border-border dark:border-zinc-700 hover:bg-secondary cursor-pointer"
                     (click)="showJson.set(!showJson())">
               {{ showJson() ? 'Hide' : 'Show' }} Raw JSON
             </button>
           </div>
   
-          <div class="mt-3 p-4 rounded-xl border border-zinc-200 dark:border-zinc-300">
+          <div class="mt-3 p-4 rounded-xl border border-border dark:border-zinc-300">
             <div class="flex items-center justify-between">
-              <div class="font-medium">Frontend</div>
-              <span class="text-xs text-zinc-500">branch {{ data()?.git?.branch }}</span>
+              <div class="font-medium text-primary">Frontend</div>
+              <span class="text-xs text-secondary">branch {{ data()?.git?.branch }}</span>
             </div>
             <div class="mt-2 text-sm grid grid-cols-3 gap-x-2 gap-y-1">
-              <div class="text-zinc-500">Commit</div>
+              <div class="text-secondary">Commit</div>
               <div class="col-span-2 font-mono text-xs break-all">{{ short(data()?.git?.commit) }}</div>
   
-              <div class="text-zinc-500">Short Commit</div>
+              <div class="text-secondary">Short Commit</div>
               <div class="col-span-2 font-mono text-xs">{{ data()?.git?.shortCommit }}</div>
   
-              <div class="text-zinc-500">Branch</div>
-              <div class="col-span-2 font-medium">{{ data()?.git?.branch }}</div>
+              <div class="text-secondary">Branch</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.git?.branch }}</div>
   
-              <div class="text-zinc-500">Tag</div>
-              <div class="col-span-2 font-medium">{{ data()?.git?.tag || 'No tag' }}</div>
+              <div class="text-secondary">Tag</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.git?.tag || 'No tag' }}</div>
   
-              <div class="text-zinc-500">Date</div>
-              <div class="col-span-2 font-medium">{{ data()?.git?.date }}</div>
+              <div class="text-secondary">Date</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.git?.date }}</div>
             </div>
             
             <!-- Commit Message -->
-            <div class="mt-4 p-3 bg-zinc-50 rounded-lg">
-              <div class="text-xs text-zinc-500 mb-1">Commit Message</div>
-              <div class="text-sm font-medium whitespace-pre-wrap">{{ data()?.git?.message }}</div>
+            <div class="mt-4 p-3 bg-secondary rounded-lg">
+              <div class="text-xs text-secondary mb-1">Commit Message</div>
+              <div class="text-sm font-medium text-primary whitespace-pre-wrap">{{ data()?.git?.message }}</div>
             </div>
           </div>
   
           @if (showJson()) {
-            <pre class="mt-4 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-300 overflow-auto text-xs">
+            <pre class="mt-4 p-4 rounded-xl bg-secondary dark:bg-zinc-900/50 border border-border dark:border-zinc-300 overflow-auto text-xs">
   {{ data() | json }}
             </pre>
           }
