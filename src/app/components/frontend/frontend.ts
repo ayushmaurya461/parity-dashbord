@@ -33,7 +33,12 @@ export class Frontend {
       'Staging': 'https://dev.mgrant.in',
       'Production': 'https://portal.mgrant.in', 
       'UAT': 'https://uat.mgrant.in',
-      'QA': 'https://qa.mgrant.in'
+      'QA': 'https://qa.mgrant.in',
+      'ICICI UAT': 'https://uaticici.mgrant.in',
+      'Sattva UAT': 'https://uatsattva.mgrant.in',
+      'ICICI PROD': 'https://icici.mgrant.in',
+      'Sattva PROD': 'https://sattva.mgrant.in',
+      'TRIF PROD': 'https://trifmgrant.dhwaniris.com'
     };
     
     return frontendUrls[env.title] || 'https://dev.mgrant.in';
