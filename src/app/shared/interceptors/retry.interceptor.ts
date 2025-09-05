@@ -17,7 +17,6 @@ export const retryInterceptor: HttpInterceptorFn = (req, next) => {
         // Only retry on network errors or 5xx server errors
         if (shouldRetry(error)) {
           const delay = Math.min(1000 * Math.pow(2, retryCount - 1), 8000);
-          console.log(`🔄 Retrying ${req.url} (attempt ${retryCount}/3) after ${delay}ms`);
           return timer(delay);
         }
         
@@ -26,7 +25,6 @@ export const retryInterceptor: HttpInterceptorFn = (req, next) => {
       }
     }),
     catchError((error: HttpErrorResponse) => {
-      console.error(`❌ Failed to fetch ${req.url} after 3 retries:`, error.message);
       return throwError(() => error);
     })
   );

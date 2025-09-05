@@ -28,8 +28,8 @@ export class Navbar {
     if (savedTheme) {
       this.isDarkMode.set(savedTheme === 'dark');
     } else {
-      // Default to system preference
-      this.isDarkMode.set(window.matchMedia('(prefers-color-scheme: dark)').matches);
+      // Default to light theme
+      this.isDarkMode.set(false);
     }
     this.applyTheme();
   }

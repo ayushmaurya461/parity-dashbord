@@ -37,6 +37,12 @@ export const SERVICES: ServiceConfig[] = [
     displayName: 'Frontend',
     endpoint: '/assets/git-info.json',
     versionPath: 'git'
+  },
+  {
+    name: 'frontend-bulk-upload',
+    displayName: 'Frontend Bulk Upload',
+    endpoint: '/assets/git-info.json',
+    versionPath: 'version'
   }
 ];
 
@@ -55,6 +61,23 @@ export function getServiceUrl(environment: Environment, service: ServiceConfig):
       'TRIF PROD': 'https://trifmgrant.dhwaniris.com'
     };
     const baseUrl = frontendUrls[environment.title] || 'https://dev.mgrant.in';
+    return `${baseUrl}${service.endpoint}`;
+  }
+  
+  // Special handling for frontend-bulk-upload service - different base URLs per environment
+  if (service.name === 'frontend-bulk-upload') {
+    const frontendBulkUploadUrls: Record<string, string> = {
+      'Staging': 'https://devadminapi.mgrant.in/bulk-upload-service',
+      'QA': 'https://qaadminapi.mgrant.in/bulk-upload-service',
+      'UAT': 'https://uatadminapi.mgrant.in/bulk-upload-service',
+      'Production': 'https://portaladminapi.mgrant.in/bulk-upload-service',
+      'ICICI UAT': 'https://uaticicifadminapi.mgrant.in/bulk-upload-service',
+      'Sattva UAT': 'https://uatsattvaadminapi.mgrant.in/bulk-upload-service',
+      'ICICI PROD': 'https://icicifadminapi.mgrant.in/bulk-upload-service',
+      'Sattva PROD': 'https://sattvaadminapi.mgrant.in/bulk-upload-service',
+      'TRIF PROD': 'https://trifmgrantadminapi.dhwaniris.com/bulk-upload-service'
+    };
+    const baseUrl = frontendBulkUploadUrls[environment.title] || 'https://devadminapi.mgrant.in/bulk-upload-service';
     return `${baseUrl}${service.endpoint}`;
   }
   

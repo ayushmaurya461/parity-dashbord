@@ -34,8 +34,6 @@ export function retryWithBackoff<T>(config: Partial<RetryConfig> = {}) {
           finalConfig.maxDelay
         );
         
-        console.log(`Retrying request (attempt ${index}/${finalConfig.maxRetries}) after ${delayTime}ms`);
-        
         return timer(delayTime).pipe(
           mergeMap(() => [value])
         );

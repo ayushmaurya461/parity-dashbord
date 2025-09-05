@@ -1,0 +1,76 @@
+<!-- frontend-bulk-upload.html -->
+<div class="service-card-container">
+    @if (dataResource.isLoading()) {
+      <div class="text-center text-secondary">Loading...</div>
+    }
+    @else if (dataResource.error()) {
+      <div class="text-center text-error">Failed to load frontend bulk upload info.</div>
+    }
+    @else if (data()) {
+      <!-- Header -->
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold tracking-tight">
+            Frontend Bulk Upload Service
+          </h2>
+          <p class="text-sm text-secondary">
+            Updated: {{ data()?.timestamp | date:'medium' }}
+          </p>
+        </div>
+        <span
+          class="inline-flex items-center gap-2 text-sm font-medium text-primary px-3 py-1.5 rounded-full"
+          [ngClass]="statusClasses()">
+          <span class="size-2 rounded-full" [ngClass]="dotClasses()"></span>
+          {{ status() }}
+        </span>
+      </div>
+  
+      <!-- Grid -->
+      <div class="grid md:grid-cols-3 gap-6 mt-6">
+        <!-- Environment -->
+        <section class="col-span-1 space-y-3">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-secondary">Environment</h3>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div class="text-secondary">Status</div><div class="font-medium text-primary">{{ data()?.status }}</div>
+            <div class="text-secondary">Timestamp</div><div class="font-medium text-primary">{{ data()?.timestamp | date:'short' }}</div>
+            <div class="text-secondary">URL</div><div class="font-medium text-primary break-all text-xs">{{ url() }}</div>
+          </div>
+        </section>
+  
+        <!-- Version Information -->
+        <section class="col-span-2 border-l-4 pl-10 border-border">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold uppercase tracking-wider text-secondary">Version Information</h3>
+            <button type="button"
+                    class="text-xs px-3 py-1.5 rounded-lg border border-border dark:border-zinc-700 hover:bg-secondary cursor-pointer"
+                    (click)="showJson.set(!showJson())">
+              {{ showJson() ? 'Hide' : 'Show' }} Raw JSON
+            </button>
+          </div>
+  
+          <div class="mt-3 p-4 rounded-xl border border-border dark:border-zinc-300">
+            <div class="flex items-center justify-between">
+              <div class="font-medium text-primary">Frontend Bulk Upload</div>
+              <span class="text-xs text-secondary">version {{ data()?.version?.mform_bulk_upload_service?.commit }}</span>
+            </div>
+            <div class="mt-2 text-sm grid grid-cols-3 gap-x-2 gap-y-1">
+              <div class="text-secondary">Commit</div>
+              <div class="col-span-2 font-mono text-xs break-all">{{ short(data()?.version?.mform_bulk_upload_service?.commit) }}</div>
+  
+              <div class="text-secondary">Branch</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.version?.mform_bulk_upload_service?.branch }}</div>
+  
+              <div class="text-secondary">Tag</div>
+              <div class="col-span-2 font-medium text-primary">{{ data()?.version?.mform_bulk_upload_service?.tag || 'No tag' }}</div>
+            </div>
+          </div>
+  
+          @if (showJson()) {
+            <pre class="mt-4 p-4 rounded-xl bg-secondary dark:bg-zinc-900/50 border border-border dark:border-zinc-300 overflow-auto text-xs">
+  {{ data() | json }}
+            </pre>
+          }
+        </section>
+      </div>
+    }
+  </div>

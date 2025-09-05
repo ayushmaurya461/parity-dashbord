@@ -55,7 +55,6 @@ export class Commits {
         return true;
       }
     });
-    console.log('Has any data:', hasData);
     return hasData;
   });
 
@@ -85,15 +84,12 @@ export class Commits {
           const error = resource.error();
           const isLoading = resource.isLoading();
           
-          // Log when data changes
+          // Force a re-computation by updating the lastUpdated signal
           if (data || error) {
-            console.log(`Data changed for ${key}:`, { data, error, isLoading });
-            // Force a re-computation by updating the lastUpdated signal
             this.lastUpdated.set(new Date().toISOString());
           }
         } catch (err) {
           // Handle resources in error state
-          console.log(`Resource ${key} is in error state:`, err);
           // Still trigger an update to show the error state
           this.lastUpdated.set(new Date().toISOString());
         }
@@ -115,8 +111,6 @@ export class Commits {
         // Add cache-busting parameter to force fresh requests
         const url = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}_refresh=${Date.now()}`;
         
-        console.log(`Creating resource for ${key}: ${url}`);
-        
         // Create appropriate resource based on service type
         let resource;
         switch (service.name) {
@@ -134,6 +128,9 @@ export class Commits {
             break;
           case 'frontend':
             resource = httpResource<FrontendResponse>(() => url);
+            break;
+          case 'frontend-bulk-upload':
+            resource = httpResource<ServiceHealth>(() => url);
             break;
           default:
             resource = httpResource<any>(() => url);
@@ -161,6 +158,23 @@ export class Commits {
       };
     }
 
+    // Special handling for frontend-bulk-upload service
+    if (serviceName === 'frontend-bulk-upload') {
+      const serviceData = data as ServiceHealth;
+      const mainService = serviceData.version?.mform_bulk_upload_service;
+      return {
+        service: serviceName,
+        status: serviceData.status || 'UNKNOWN',
+        version: {
+          commit: mainService?.commit || 'N/A',
+          branch: mainService?.branch || 'N/A',
+          tag: mainService?.tag || 'N/A',
+          buildTime: mainService?.buildTime
+        },
+        error: undefined
+      };
+    }
+
     // Handle other services
     return {
       service: serviceName,
@@ -171,8 +185,6 @@ export class Commits {
   }
 
   private buildTableData(): CommitTableData {
-    console.log('Building table data...');
-    console.log('Data resources size:', this.dataResources.size);
     const environmentData: EnvironmentCommitData[] = this.environments.map(env => {
       const services: ServiceCommitData[] = this.services.map(service => {
         const key = `${env.title}-${service.name}`;
@@ -180,7 +192,6 @@ export class Commits {
         // Check if we have fresh data from direct HTTP calls
         const freshDataEntry = this.freshData().get(key);
         if (freshDataEntry) {
-          console.log(`Using fresh data for ${key}:`, freshDataEntry);
           if (freshDataEntry.error) {
             return {
               service: service.name,
@@ -211,15 +222,8 @@ export class Commits {
           data = resource.value();
           error = resource.error();
           isLoading = resource.isLoading();
-          
-          // Debug logging
-          console.log(`Service: ${service.name}, Env: ${env.title}, Key: ${key}`);
-          console.log(`Data:`, data);
-          console.log(`Error:`, error);
-          console.log(`IsLoading:`, isLoading);
         } catch (err) {
           // Resource is in error state
-          console.log(`Resource ${key} is in error state:`, err);
           data = null;
           error = err;
           isLoading = false;
@@ -269,6 +273,23 @@ export class Commits {
           };
         }
 
+        // Special handling for frontend-bulk-upload service
+        if (service.name === 'frontend-bulk-upload') {
+          const serviceData = data as ServiceHealth;
+          const mainService = serviceData.version?.mform_bulk_upload_service;
+          return {
+            service: service.name,
+            status: serviceData.status || 'UNKNOWN',
+            version: {
+              commit: mainService?.commit || 'N/A',
+              branch: mainService?.branch || 'N/A',
+              tag: mainService?.tag || 'N/A',
+              buildTime: mainService?.buildTime
+            },
+            error: undefined
+          };
+        }
+
         return {
           service: service.name,
           status: data.status || 'UNKNOWN',
@@ -287,7 +308,6 @@ export class Commits {
       lastUpdated: this.lastUpdated()
     };
     
-    console.log('Final table data:', result);
     return result;
   }
 
@@ -309,9 +329,7 @@ export class Commits {
       }
     });
     
-    console.log('Loading states:', loadingStates);
     const isLoading = loadingStates.some(state => state.isLoading);
-    console.log('Overall loading state:', isLoading);
     
     return isLoading;
   }
@@ -445,6 +463,11 @@ export class Commits {
         return [{ name: 'main', commit: version.commit.slice(0, 7) }];
       }
       
+      // Handle ServiceHealth structure (like frontend-bulk-upload)
+      if (version.mform_bulk_upload_service && version.mform_bulk_upload_service.commit && version.mform_bulk_upload_service.commit !== 'Error' && version.mform_bulk_upload_service.commit !== 'N/A') {
+        return [{ name: 'mform_bulk_upload_service', commit: version.mform_bulk_upload_service.commit.slice(0, 7) }];
+      }
+      
       // Handle multiple versions (like alerts, bulk-upload, data-visualization services)
       const commits: Array<{name: string, commit: string}> = [];
       Object.entries(version).forEach(([key, value]: [string, any]) => {
@@ -476,8 +499,6 @@ export class Commits {
   }
 
   refreshData() {
-    console.log('Manual refresh triggered - using direct HTTP calls');
-    
     // Set refreshing state
     this.isRefreshing.set(true);
     
@@ -486,7 +507,6 @@ export class Commits {
     
     // Set a timeout fallback to ensure button always returns to normal
     const timeoutId = setTimeout(() => {
-      console.log('Refresh timeout - forcing button to return to normal');
       this.isRefreshing.set(false);
       this.lastUpdated.set(new Date().toISOString());
     }, 10000); // 10 second timeout
@@ -498,8 +518,6 @@ export class Commits {
       this.services.forEach(service => {
         const key = `${env.title}-${service.name}`;
         const url = getServiceUrl(env, service);
-        
-        console.log(`Making direct HTTP call for ${key}: ${url}`);
         
         // Make direct HTTP call based on service type
         let promise: Promise<any>;
@@ -519,16 +537,17 @@ export class Commits {
           case 'frontend':
             promise = firstValueFrom(this.http.get<FrontendResponse>(url));
             break;
+          case 'frontend-bulk-upload':
+            promise = firstValueFrom(this.http.get<ServiceHealth>(url));
+            break;
           default:
             promise = firstValueFrom(this.http.get<any>(url));
         }
         
         refreshPromises.push(
           promise.then(data => {
-            console.log(`Successfully refreshed ${key}:`, data);
             return { key, data, error: null };
           }).catch(error => {
-            console.log(`Error refreshing ${key}:`, error);
             return { key, data: null, error };
           })
         );
@@ -537,26 +556,20 @@ export class Commits {
     
     // Check if we have any requests to make
     if (refreshPromises.length === 0) {
-      console.log('No requests to make - stopping refresh immediately');
       clearTimeout(timeoutId);
       this.isRefreshing.set(false);
       this.lastUpdated.set(new Date().toISOString());
       return;
     }
     
-    console.log(`Making ${refreshPromises.length} HTTP requests for refresh`);
-    
     // Wait for all requests to complete
     Promise.all(refreshPromises).then(results => {
-      console.log('All refresh requests completed:', results);
-      
       // Store fresh data in the signal
       const freshDataMap = new Map<string, any>();
       results.forEach(result => {
         freshDataMap.set(result.key, { data: result.data, error: result.error });
       });
       this.freshData.set(freshDataMap);
-      console.log('Stored fresh data:', freshDataMap);
       
       // Clear the timeout since we completed successfully
       clearTimeout(timeoutId);
@@ -568,17 +581,13 @@ export class Commits {
       // Update timestamp and stop refreshing
       this.lastUpdated.set(new Date().toISOString());
       this.isRefreshing.set(false);
-      console.log('Refresh completed - button should return to normal');
     }).catch(error => {
-      console.error('Error during refresh:', error);
-      
       // Clear the timeout since we're handling the error
       clearTimeout(timeoutId);
       
       // Even if there's an error, make sure to stop refreshing
       this.isRefreshing.set(false);
       this.lastUpdated.set(new Date().toISOString());
-      console.log('Refresh failed but button returned to normal');
     });
   }
 

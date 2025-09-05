@@ -61,13 +61,13 @@
     </div>
   } @else {
     
-    <div class="bg-white overflow-x-auto">
+    <div class="table-container">
       <table class="w-full border-collapse">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b border-gray-200">SERVICE</th>
+            <th class="sticky-header sticky-column">SERVICE</th>
             @for (env of environments; track env.title) {
-              <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700 border-b border-gray-200">
+              <th class="sticky-header">
                 {{ env.title }}
               </th>
             }
@@ -90,7 +90,7 @@
           } @else {
             @for (service of getFilteredServices(); track service.name) {
             <tr class="border-b border-gray-100 hover:bg-gray-50">
-              <td class="service-column">
+              <td class="service-column sticky-column">
                 <div class="service-name">
                   <div class="service-title">{{ service.displayName }}</div>
                   @if (getBaselineCommits(service.name).length > 0) {

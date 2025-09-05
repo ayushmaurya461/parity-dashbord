@@ -7,12 +7,13 @@ import { Alerts } from '../alerts/alerts';
 import { BulkUpload } from '../bulk-upload/bulk-upload';
 import { DataVisualization } from '../data-visualization/data-visualization';
 import { Frontend } from "../frontend/frontend";
+import { FrontendBulkUpload } from "../frontend-bulk-upload/frontend-bulk-upload";
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, Admin, Alerts, BulkUpload, DataVisualization, Frontend],
+  imports: [CommonModule, Admin, Alerts, BulkUpload, DataVisualization, Frontend, FrontendBulkUpload],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
